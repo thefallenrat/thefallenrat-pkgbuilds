@@ -1,0 +1,35 @@
+# Maintainer: Rafli Akmal <rafliakmaltejakusuma at gmail dot com>
+
+pkgname=gnome-games
+pkgver=3.24.1
+pkgrel=2
+pkgdesc='Simple game launcher for GNOME'
+arch=('x86_64' 'i686')
+license=('GPL3')
+url='https://wiki.gnome.org/Apps/Games'
+depends=('grilo' 'libevdev' 'retro-gtk' 'tracker')
+makedepends=('intltool' 'vala')
+source=("https://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz"
+	"ikey-fix.patch::https://dev.solus-project.com/file/data/iazljloes7dzu6mgjrtd/PHID-FILE-3dec2swylhcyxkqllgeu/0001-plugins-steam-Use-fallback-Steam-path-when-registry-.patch"
+	)
+sha256sums=('e81fbd16e294bde572b4041c8dd068588525138066a20f4fda29be20c28fde8d'
+            '27d435d2052262c0289061e8e2343c7385da483f1ec7f22f539589ae13922a76')
+
+prepare() {
+	cd $pkgname-$pkgver
+	patch -Np1 -i "$srcdir"/ikey-fix.patch
+	# Regenerate C files from Vala sources to fix build
+	rm src/gnome_games_vala.stamp
+}
+
+build() {
+	cd $pkgname-$pkgver
+	./configure --prefix=/usr
+	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+	make
+}
+
+package() {
+	cd $pkgname-$pkgver
+	make DESTDIR="$pkgdir" install
+}
