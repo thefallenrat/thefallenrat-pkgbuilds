@@ -1,0 +1,23 @@
+#Maintainer: Rafli Akmal <rafliakmaltejakusuma@gmail.com>
+
+pkgname=thefallenrat-keyring
+pkgver=20170926
+pkgrel=1
+pkgdesc='thefallenrat PGP keyring'
+arch=('any')
+url='https://github.com/thefallenrat'
+license=('GPL')
+install="${pkgname}.install"
+source=('Makefile'
+        'thefallenrat.gpg'
+        'thefallenrat-revoked'
+        'thefallenrat-trusted')
+sha256sums=('31c45cd7e11ddc087df8180389f67a69531ab5d3ea1577d9c83d7dfdec3063e6'
+            '1c43636cfc129e1a242fc7d2f60792af49a4901b2f89fa1cfca9d408e0ae7ff2'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+            'e3abed33d4b27f8c31875a8edceae1622de29b31c2c731ceea1b70265a36661d')
+
+package() {
+	cd "${srcdir}"
+	make PREFIX=/usr DESTDIR=${pkgdir} install
+}
