@@ -1,0 +1,30 @@
+From 3fbe84b8cddb6b5e16474fa889765cda8de182a5 Mon Sep 17 00:00:00 2001
+From: Ikey Doherty <ikey@solus-project.com>
+Date: Sun, 30 Jul 2017 13:19:18 +0100
+Subject: [PATCH] plugins/steam: Use fallback Steam path when registry doesn't
+ specify it
+
+Signed-off-by: Ikey Doherty <ikey@solus-project.com>
+---
+ plugins/steam/src/steam-game-source.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/plugins/steam/src/steam-game-source.c b/plugins/steam/src/steam-game-source.c
+index e5e315a..f71835e 100644
+--- a/plugins/steam/src/steam-game-source.c
++++ b/plugins/steam/src/steam-game-source.c
+@@ -325,6 +325,11 @@ GamesSteamGameSource* games_steam_game_source_construct (GType object_type, GErr
+ 	_tmp8_ = registry;
+ 	_tmp9_ = games_steam_registry_get_data (_tmp8_, GAMES_STEAM_GAME_SOURCE_INSTALL_PATH_REGISTRY_PATH, G_N_ELEMENTS (GAMES_STEAM_GAME_SOURCE_INSTALL_PATH_REGISTRY_PATH));
+ 	install_path = _tmp9_;
++    /* Yes I am evil, but the .vala won't recompile */
++    if (!install_path) {
++        install_path = g_strdup_printf("%s/.steam/steam", g_get_home_dir());
++    }
++
+ 	_tmp10_ = home;
+ 	_tmp11_ = g_strconcat (_tmp10_, GAMES_STEAM_GAME_SOURCE_DEFAULT_INSTALL_DIR_SYMLINK, NULL);
+ 	_tmp12_ = install_path;
+-- 
+2.13.3
+
