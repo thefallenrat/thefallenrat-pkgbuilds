@@ -1,0 +1,16 @@
+# Maintainer: Rafli Akmal <thefallenrat@artixlinux.org>
+pkgname=openrc-zsh-completions
+pkgver=2.0
+pkgrel=1
+pkgdesc="ZSH completions script for openRC"
+arch=(any)
+url="https://github.com/gentoo/gentoo-zsh-completions"
+license=('free')
+depends=('zsh')
+source=("https://raw.githubusercontent.com/gentoo/gentoo-zsh-completions/blob/master/src/_openrc")
+sha256sums=('93564bf3782651165fa6c284edf9f29470959a8a9935c61a6a1d0082c087e4bf')
+
+
+package() {
+	install -Dm644 "$srcdir/_openrc" "$pkgdir/usr/share/zsh/site-functions/_openrc"
+}
